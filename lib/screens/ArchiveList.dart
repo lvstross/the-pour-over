@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:url_launcher/url_launcher.dart';
 
-// @TODO: added a loading state for fetching the articles.
 class ArchiveItem {
   final String title;
   final String date;
@@ -20,10 +19,16 @@ class ArchiveList extends StatefulWidget {
 }
 
 class _ArchiveListState extends State<ArchiveList> {
+  // @TODO: Refine this by moving state up so that it
+  // doesn't have to load every time the page renders
   List<ArchiveItem> archiveItems = [];
+  bool isLoading = false;
 
   @override
   void initState() {
+    setState(() {
+      isLoading = true;
+    });
     getEmailCampArchive();
     super.initState();
   }
@@ -62,6 +67,7 @@ class _ArchiveListState extends State<ArchiveList> {
 
     setState(() {
       archiveItems = items;
+      isLoading = false;
     });
   }
 
@@ -75,51 +81,50 @@ class _ArchiveListState extends State<ArchiveList> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('The Pour Over'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
-      body: Container(
-        color: Theme.of(context).colorScheme.background,
-        child: Center(
-          child: ListView(
-              padding: const EdgeInsets.all(8),
-              children: archiveItems.map((ArchiveItem item) {
-                return GestureDetector(
-                  onTap: () => {_openArticleUrl(item.path)},
-                  child: Container(
-                    padding: const EdgeInsets.only(top: 8, bottom: 8),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                          color: Theme.of(context).colorScheme.background,
-                          border: Border.all(
-                              // color: const Color.fromARGB(255, 176, 176, 176),
-                              color: Theme.of(context).colorScheme.primary,
-                              width: 1),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5))),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              item.title,
-                              style: const TextStyle(fontSize: 16),
-                            ),
-                            const Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Color.fromRGBO(241, 129, 125, 1),
-                            ),
-                          ],
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: Center(
+        child: isLoading
+            ? Center(
+                child: CircularProgressIndicator(
+                    color: Theme.of(context).colorScheme.primary),
+              )
+            : ListView(
+                padding: const EdgeInsets.all(8),
+                children: archiveItems.map((ArchiveItem item) {
+                  return GestureDetector(
+                    onTap: () => {_openArticleUrl(item.path)},
+                    child: Container(
+                      padding: const EdgeInsets.only(top: 8, bottom: 8),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.background,
+                            border: Border.all(
+                                // color: const Color.fromARGB(255, 176, 176, 176),
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 1),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5))),
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                item.title,
+                                style: const TextStyle(fontSize: 16),
+                              ),
+                              const Icon(
+                                Icons.arrow_forward_ios_outlined,
+                                color: Color.fromRGBO(241, 129, 125, 1),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                );
-              }).toList()),
-        ),
+                  );
+                }).toList()),
       ),
     );
   }
