@@ -7,12 +7,12 @@ This app is just a personal app that I use to keep up with The Pour Over news. T
 The app features a light mode and a dark mode as shown below:
 
 ## Light Mode
-<img src="./images/archive_list_light.png" >
-<img src="./images/news_room_light.png" >
+<img width="50%" src="./images/archive_list_light.png" >
+<img width="50%" src="./images/news_room_light.png" >
 
 ## Dark Mode
-<img src="./images/archive_list_dark.png" >
-<img src="./images/news_room_dark.png" >
+<img width="50%" src="./images/archive_list_dark.png" >
+<img width="50%" src="./images/news_room_dark.png" >
 
 As of right now the app will not be made publicly available on any app stores in hopes that The Pour Over would possibly aquire this from me at a later date. ;) If not, no biggy. I still get good use out of my personal apps.
 
