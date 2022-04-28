@@ -50,8 +50,8 @@ class _ArchiveListState extends State<ArchiveList> {
     List<ArchiveItem> items = [];
 
     for (var element in archiveList) {
-      var inner = element.innerHtml.toString();
-      var title = element.text;
+      String inner = element.innerHtml.toString();
+      String title = element.text.split(' - ')[1];
       if (inner.contains('href')) {
         RegExp exp = RegExp(r'(["])(?:(?=(\\?))\2.)*?\1');
         Iterable<RegExpMatch> matches = exp.allMatches(inner);
@@ -77,6 +77,13 @@ class _ArchiveListState extends State<ArchiveList> {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  String truncate(String val) {
+    if (val.length > 35) {
+      return val.substring(0, 35) + '...';
+    }
+    return val;
   }
 
   @override
@@ -110,9 +117,18 @@ class _ArchiveListState extends State<ArchiveList> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                item.title,
-                                style: const TextStyle(fontSize: 16),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item.date,
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                  Text(
+                                    truncate(item.title),
+                                    style: const TextStyle(fontSize: 16),
+                                  ),
+                                ],
                               ),
                               const Icon(
                                 Icons.arrow_forward_ios_outlined,
