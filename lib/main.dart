@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pour_over_app/screens/ArchiveList.dart';
-import 'package:pour_over_app/screens/PageViews.dart';
+import 'package:provider/provider.dart';
+import 'package:pour_over_app/providers/news_grid_provider.dart';
+import 'package:pour_over_app/providers/archive_list_provider.dart';
+import 'package:pour_over_app/screens/archive_list.dart';
+import 'package:pour_over_app/screens/news_grid.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => ArchiveListProvider()),
+      ChangeNotifierProvider(create: (_) => NewsGridProvider())
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -45,17 +54,28 @@ class _MainState extends State<Main> {
 
   final pages = [
     const ArchiveList(),
-    const Page1(),
+    const NewsGrid(),
   ];
+
+  String getAppBarTitle() {
+    switch (pageIndex) {
+      case 0:
+        return 'Archive List';
+      case 1:
+        return 'News Rooms';
+      default:
+        return 'the pour over';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-          title: const Text(
-            'the pour over',
-            style: TextStyle(fontSize: 26),
+          title: Text(
+            getAppBarTitle(),
+            style: const TextStyle(fontSize: 26),
           ),
           backgroundColor: Theme.of(context).colorScheme.primary,
           leading: SvgPicture.asset('assets/invert-logo.svg')),
@@ -115,6 +135,5 @@ class _MainState extends State<Main> {
         ),
       ),
     );
-    ;
   }
 }
