@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
+import 'package:pour_over_app/providers/utils.dart';
 
 class ArchiveItem {
   final String title;
@@ -42,15 +43,12 @@ class ArchiveListProvider with ChangeNotifier {
       String inner = element.innerHtml.toString();
       String title = element.text.split(' - ')[1];
       if (inner.contains('href')) {
-        RegExp exp = RegExp(r'(["])(?:(?=(\\?))\2.)*?\1');
-        Iterable<RegExpMatch> matches = exp.allMatches(inner);
-        List<String?> attrs = [];
-        for (var m in matches) {
-          var groupItem = m.group(0);
-          attrs.add(groupItem?.substring(1, groupItem.length - 1));
-        }
+        List<String?> attrs = getElementAttributeValues(inner);
         items.add(ArchiveItem(
-            title: title, date: inner.split('-')[0], path: attrs[0] as String));
+          title: title,
+          date: inner.split('-')[0],
+          path: attrs[0] as String,
+        ));
       }
     }
 

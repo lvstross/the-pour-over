@@ -22,23 +22,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'The Pour Over',
-        theme: ThemeData(
-            colorScheme: const ColorScheme.light(
-                background: Color.fromRGBO(255, 255, 255, 1),
-                primary: Color.fromRGBO(241, 129, 125, 1),
-                secondary: Color.fromRGBO(241, 129, 125, 0.5)),
-            textTheme: const TextTheme(button: TextStyle(color: Colors.black))),
-        darkTheme: ThemeData(
-            colorScheme: const ColorScheme.dark(
-                background: Color.fromARGB(255, 82, 82, 82),
-                primary: Color.fromRGBO(241, 129, 125, 1),
-                secondary: Color.fromRGBO(241, 129, 125, 0.5)),
-            textTheme: const TextTheme(
-                button: TextStyle(
-              color: Colors.white,
-            ))),
-        home: const Main());
+      title: 'The Pour Over',
+      theme: ThemeData(
+          colorScheme: const ColorScheme.light(
+              background: Color.fromRGBO(255, 255, 255, 1),
+              primary: Color.fromRGBO(241, 129, 125, 1),
+              secondary: Color.fromRGBO(241, 129, 125, 0.5)),
+          textTheme: const TextTheme(button: TextStyle(color: Colors.black))),
+      darkTheme: ThemeData(
+          colorScheme: const ColorScheme.dark(
+              background: Color.fromARGB(255, 82, 82, 82),
+              primary: Color.fromRGBO(241, 129, 125, 1),
+              secondary: Color.fromRGBO(241, 129, 125, 0.5)),
+          textTheme: const TextTheme(
+              button: TextStyle(
+            color: Colors.white,
+          ))),
+      home: const Main(),
+    );
   }
 }
 
@@ -73,12 +74,13 @@ class _MainState extends State<Main> {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-          title: Text(
-            getAppBarTitle(),
-            style: const TextStyle(fontSize: 26),
-          ),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          leading: SvgPicture.asset('assets/invert-logo.svg')),
+        title: Text(
+          getAppBarTitle(),
+          style: const TextStyle(fontSize: 26),
+        ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        leading: SvgPicture.asset('assets/invert-logo.svg'),
+      ),
       body: pages[pageIndex],
       bottomNavigationBar: Container(
         height: 80,
