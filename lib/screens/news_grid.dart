@@ -46,6 +46,19 @@ class NewsGrid extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(10),
                             child: Container(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).colorScheme.background,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Theme.of(context).colorScheme.shadow,
+                                    spreadRadius: 5,
+                                    blurRadius: 7,
+                                    offset: const Offset(0, 2),
+                                  )
+                                ],
+                              ),
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Column(
@@ -55,37 +68,26 @@ class NewsGrid extends StatelessWidget {
                                       height: 30,
                                       child: Text(
                                         _newsItems[index].date,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyLarge,
                                       ),
                                     ),
                                     SizedBox(
                                       height: 20,
                                       child: Text(
                                         _newsItems[index].author,
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14,
-                                            fontStyle: FontStyle.italic),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
                                       ),
                                     ),
                                     Text(
                                       _newsItems[index].title,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                      ),
+                                      style:
+                                          Theme.of(context).textTheme.bodyLarge,
                                     ),
                                   ],
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.primary,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(20),
                                 ),
                               ),
                             ),

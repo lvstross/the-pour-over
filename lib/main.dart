@@ -24,20 +24,33 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'The Pour Over',
       theme: ThemeData(
-          colorScheme: const ColorScheme.light(
-              background: Color.fromRGBO(255, 255, 255, 1),
-              primary: Color.fromRGBO(241, 129, 125, 1),
-              secondary: Color.fromRGBO(241, 129, 125, 0.5)),
-          textTheme: const TextTheme(button: TextStyle(color: Colors.black))),
+        colorScheme: const ColorScheme.light(
+          background: Color.fromRGBO(255, 255, 255, 1),
+          shadow: Color.fromARGB(255, 218, 218, 218),
+          primary: Color.fromRGBO(241, 129, 125, 1),
+          secondary: Color.fromRGBO(241, 129, 125, 0.5),
+        ),
+        textTheme: const TextTheme(
+          bodySmall:
+              TextStyle(color: Color.fromRGBO(241, 129, 125, 1), fontSize: 12),
+          bodyMedium: TextStyle(color: Colors.black, fontSize: 14),
+          bodyLarge: TextStyle(color: Colors.black, fontSize: 18),
+        ),
+      ),
       darkTheme: ThemeData(
-          colorScheme: const ColorScheme.dark(
-              background: Color.fromARGB(255, 82, 82, 82),
-              primary: Color.fromRGBO(241, 129, 125, 1),
-              secondary: Color.fromRGBO(241, 129, 125, 0.5)),
-          textTheme: const TextTheme(
-              button: TextStyle(
-            color: Colors.white,
-          ))),
+        colorScheme: const ColorScheme.dark(
+          background: Color.fromARGB(255, 82, 82, 82),
+          shadow: Color.fromARGB(255, 64, 64, 64),
+          primary: Color.fromRGBO(241, 129, 125, 1),
+          secondary: Color.fromRGBO(241, 129, 125, 0.5),
+        ),
+        textTheme: const TextTheme(
+          bodySmall:
+              TextStyle(color: Color.fromRGBO(241, 129, 125, 1), fontSize: 12),
+          bodyMedium: TextStyle(color: Colors.white, fontSize: 14),
+          bodyLarge: TextStyle(color: Colors.white, fontSize: 18),
+        ),
+      ),
       home: const Main(),
     );
   }

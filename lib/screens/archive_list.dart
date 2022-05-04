@@ -41,40 +41,46 @@ class ArchiveList extends StatelessWidget {
                   return GestureDetector(
                     onTap: () => {_openArticleUrl(item.path)},
                     child: Container(
-                      padding: const EdgeInsets.only(top: 8, bottom: 8),
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                            color: Theme.of(context).colorScheme.background,
-                            border: Border.all(
-                              color: Theme.of(context).colorScheme.primary,
-                              width: 1,
+                      margin: const EdgeInsets.only(top: 8, bottom: 8),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Theme.of(context).colorScheme.shadow,
+                            spreadRadius: 5,
+                            blurRadius: 7,
+                            offset: const Offset(0, 2),
+                          )
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.date,
+                                  style: const TextStyle(fontSize: 16),
+                                ),
+                                Text(
+                                  truncate(item.title),
+                                  style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 16),
+                                ),
+                              ],
                             ),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(5))),
-                        child: Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    item.date,
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                  Text(
-                                    truncate(item.title),
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
-                                ],
-                              ),
-                              const Icon(
-                                Icons.arrow_forward_ios_outlined,
-                                color: Color.fromRGBO(241, 129, 125, 1),
-                              ),
-                            ],
-                          ),
+                            const Icon(
+                              Icons.arrow_forward_ios_outlined,
+                              color: Color.fromRGBO(241, 129, 125, 1),
+                            ),
+                          ],
                         ),
                       ),
                     ),
