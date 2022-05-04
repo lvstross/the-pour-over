@@ -1,10 +1,10 @@
 # Features
 
-## In-progress:
-1. Paginate the news room screen to get more news articles
+## Tasks:
+[x] Paginate the news room screen to get more news articles
 
-## Back Log:
-None
+## In-progress:
+1. Add podcast section pulling from - https://feeds.buzzsprout.com/1835468.rss
 
 ## Maybe:
 1. Store fetched data in sqlite database
