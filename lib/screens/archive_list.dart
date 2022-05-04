@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:pour_over_app/providers/archive_list_provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:pour_over_app/providers/archive_list_provider.dart';
+import 'package:pour_over_app/widgets/archive_list_item.dart';
 
 class ArchiveList extends StatelessWidget {
   const ArchiveList({Key? key}) : super(key: key);
@@ -35,57 +37,28 @@ class ArchiveList extends StatelessWidget {
                 child: CircularProgressIndicator(
                     color: Theme.of(context).colorScheme.primary),
               )
-            : ListView(
-                padding: const EdgeInsets.all(8),
-                children: archiveItems.map((ArchiveItem item) {
-                  return GestureDetector(
-                    onTap: () => {_openArticleUrl(item.path)},
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 8, bottom: 8),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.background,
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context).colorScheme.shadow,
-                            spreadRadius: 5,
-                            blurRadius: 7,
-                            offset: const Offset(0, 2),
-                          )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  item.date,
-                                  style: const TextStyle(fontSize: 16),
-                                ),
-                                Text(
-                                  truncate(item.title),
-                                  style: TextStyle(
-                                      color:
-                                          Theme.of(context).colorScheme.primary,
-                                      fontSize: 16),
-                                ),
-                              ],
-                            ),
-                            const Icon(
-                              Icons.arrow_forward_ios_outlined,
-                              color: Color.fromRGBO(241, 129, 125, 1),
-                            ),
-                          ],
+            : AnimationLimiter(
+                child: ListView.builder(
+                  itemCount: archiveItems.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 275),
+                      child: SlideAnimation(
+                        verticalOffset: 500.0,
+                        horizontalOffset: 500.0,
+                        child: ArchiveListItem(
+                          onPress: () =>
+                              {_openArticleUrl(archiveItems[index].path)},
+                          itemIndex: index,
+                          date: archiveItems[index].date,
+                          title: truncate(archiveItems[index].title),
                         ),
                       ),
-                    ),
-                  );
-                }).toList()),
+                    );
+                  },
+                ),
+              ),
       ),
     );
   }

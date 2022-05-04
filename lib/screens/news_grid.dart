@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pour_over_app/widgets/news_grid_item.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pour_over_app/providers/news_grid_provider.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 class NewsGrid extends StatelessWidget {
   const NewsGrid({Key? key}) : super(key: key);
@@ -32,68 +34,33 @@ class NewsGrid extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               child: Column(
                 children: [
-                  GridView.builder(
-                      shrinkWrap: true,
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: _newsItems.length,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2),
-                      itemBuilder: (context, index) {
-                        return GestureDetector(
-                          onTap: () =>
-                              {_openArticleUrl(_newsItems[index].path)},
-                          child: Padding(
-                            padding: const EdgeInsets.all(10),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.background,
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(10)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Theme.of(context).colorScheme.shadow,
-                                    spreadRadius: 5,
-                                    blurRadius: 7,
-                                    offset: const Offset(0, 2),
-                                  )
-                                ],
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 30,
-                                      child: Text(
-                                        _newsItems[index].date,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyLarge,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 20,
-                                      child: Text(
-                                        _newsItems[index].author,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodySmall,
-                                      ),
-                                    ),
-                                    Text(
-                                      _newsItems[index].title,
-                                      style:
-                                          Theme.of(context).textTheme.bodyLarge,
-                                    ),
-                                  ],
+                  AnimationLimiter(
+                    child: GridView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: _newsItems.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2),
+                        itemBuilder: (BuildContext context, int index) {
+                          return AnimationConfiguration.staggeredGrid(
+                            position: index,
+                            duration: const Duration(milliseconds: 275),
+                            columnCount: 2,
+                            child: ScaleAnimation(
+                              child: FadeInAnimation(
+                                child: NewsGridItem(
+                                  onPress: () =>
+                                      {_openArticleUrl(_newsItems[index].path)},
+                                  date: _newsItems[index].date,
+                                  author: _newsItems[index].author,
+                                  title: _newsItems[index].title,
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        }),
+                  ),
                   Center(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
