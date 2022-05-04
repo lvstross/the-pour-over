@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pour_over_app/widgets/news_grid_item.dart';
+import 'package:pour_over_app/widgets/load_more.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:pour_over_app/providers/news_grid_provider.dart';
@@ -61,30 +62,9 @@ class NewsGrid extends StatelessWidget {
                           );
                         }),
                   ),
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: _isLoadingMore
-                          ? CircularProgressIndicator(
-                              color: Theme.of(context).colorScheme.primary)
-                          : Material(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(5)),
-                              color: Theme.of(context).colorScheme.background,
-                              child: InkWell(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5)),
-                                onTap: () => {_fetchMoreNews()},
-                                child: const SizedBox(
-                                  width: 230,
-                                  height: 50,
-                                  child: Center(
-                                    child: Text('See More'),
-                                  ),
-                                ),
-                              ),
-                            ),
-                    ),
+                  LoadMore(
+                    onPress: () => _fetchMoreNews(),
+                    isLoading: _isLoadingMore,
                   )
                 ],
               ),
