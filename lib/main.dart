@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:pour_over_app/providers/news_grid_provider.dart';
 import 'package:pour_over_app/providers/archive_list_provider.dart';
@@ -8,6 +10,7 @@ import 'package:pour_over_app/screens/home.dart';
 import 'package:pour_over_app/screens/archive_list.dart';
 import 'package:pour_over_app/screens/news_grid.dart';
 import 'package:pour_over_app/screens/podcast_feed.dart';
+import 'package:pour_over_app/widgets/audio_player.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -25,11 +28,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Watch Provider Data
-    context.watch<ArchiveListProvider>();
-    context.watch<NewsGridProvider>();
-    context.watch<PodcastFeedProvider>();
-
     return MaterialApp(
       title: 'The Pour Over',
       theme: ThemeData(
@@ -99,105 +97,137 @@ class _MainState extends State<Main> {
 
   @override
   Widget build(BuildContext context) {
+    // Watch Provider Data
+    context.watch<ArchiveListProvider>();
+    context.watch<NewsGridProvider>();
+    bool showAudioPlayer = context.watch<PodcastFeedProvider>().showAudioPlayer;
+    String currPlayUrl = context.watch<PodcastFeedProvider>().currentPlayingUrl;
+    Function updateShowAudioPlayer =
+        context.watch<PodcastFeedProvider>().updateShowAudioPlayer;
+
+    void closePlayer() {
+      updateShowAudioPlayer(false);
+    }
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: Text(
           getAppBarTitle(),
-          style: const TextStyle(fontSize: 26),
+          style: GoogleFonts.damion(
+            textStyle: const TextStyle(fontSize: 40),
+          ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
         leading: SvgPicture.asset('assets/invert-logo.svg'),
       ),
       body: pages[pageIndex],
-      bottomNavigationBar: Container(
-        height: 80,
-        padding: const EdgeInsets.only(bottom: 20),
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+      bottomNavigationBar: SizedBox(
+        height: showAudioPlayer ? 140 : 80,
+        child: Column(
           children: [
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {
-                setState(() {
-                  pageIndex = 0;
-                });
-              },
-              icon: pageIndex == 0
-                  ? const Icon(
-                      Icons.home_sharp,
-                      color: Colors.white,
-                      size: 35,
-                    )
-                  : const Icon(
-                      Icons.home_outlined,
-                      color: Colors.white,
-                      size: 35,
+            showAudioPlayer
+                // @todo: Change this to a custom animation rather than
+                // using the staggered package.
+                ? AnimationConfiguration.staggeredList(
+                    position: 0,
+                    duration: const Duration(milliseconds: 275),
+                    child: SlideAnimation(
+                      horizontalOffset: 500.0,
+                      child: AudioPlayerWidget(
+                        url: currPlayUrl,
+                        onClose: closePlayer,
+                      ),
                     ),
-            ),
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {
-                setState(() {
-                  pageIndex = 1;
-                });
-              },
-              icon: pageIndex == 1
-                  ? const Icon(
-                      Icons.library_books,
-                      color: Colors.white,
-                      size: 35,
-                    )
-                  : const Icon(
-                      Icons.library_books_outlined,
-                      color: Colors.white,
-                      size: 35,
-                    ),
-            ),
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {
-                setState(() {
-                  pageIndex = 2;
-                });
-              },
-              icon: pageIndex == 2
-                  ? const Icon(
-                      Icons.grid_view_sharp,
-                      color: Colors.white,
-                      size: 35,
-                    )
-                  : const Icon(
-                      Icons.grid_view_outlined,
-                      color: Colors.white,
-                      size: 35,
-                    ),
-            ),
-            IconButton(
-              enableFeedback: false,
-              onPressed: () {
-                setState(() {
-                  pageIndex = 3;
-                });
-              },
-              icon: pageIndex == 3
-                  ? const Icon(
-                      Icons.music_note,
-                      color: Colors.white,
-                      size: 35,
-                    )
-                  : const Icon(
-                      Icons.music_note_outlined,
-                      color: Colors.white,
-                      size: 35,
-                    ),
+                  )
+                : const Center(),
+            Container(
+              height: 80,
+              padding: const EdgeInsets.only(bottom: 20),
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      setState(() {
+                        pageIndex = 0;
+                      });
+                    },
+                    icon: pageIndex == 0
+                        ? const Icon(
+                            Icons.home_sharp,
+                            color: Colors.white,
+                            size: 35,
+                          )
+                        : const Icon(
+                            Icons.home_outlined,
+                            color: Colors.white,
+                            size: 35,
+                          ),
+                  ),
+                  IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      setState(() {
+                        pageIndex = 1;
+                      });
+                    },
+                    icon: pageIndex == 1
+                        ? const Icon(
+                            Icons.library_books,
+                            color: Colors.white,
+                            size: 35,
+                          )
+                        : const Icon(
+                            Icons.library_books_outlined,
+                            color: Colors.white,
+                            size: 35,
+                          ),
+                  ),
+                  IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      setState(() {
+                        pageIndex = 2;
+                      });
+                    },
+                    icon: pageIndex == 2
+                        ? const Icon(
+                            Icons.grid_view_sharp,
+                            color: Colors.white,
+                            size: 35,
+                          )
+                        : const Icon(
+                            Icons.grid_view_outlined,
+                            color: Colors.white,
+                            size: 35,
+                          ),
+                  ),
+                  IconButton(
+                    enableFeedback: false,
+                    onPressed: () {
+                      setState(() {
+                        pageIndex = 3;
+                      });
+                    },
+                    icon: pageIndex == 3
+                        ? const Icon(
+                            Icons.music_note,
+                            color: Colors.white,
+                            size: 35,
+                          )
+                        : const Icon(
+                            Icons.music_note_outlined,
+                            color: Colors.white,
+                            size: 35,
+                          ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -5,8 +5,14 @@ import 'package:flutter/material.dart';
 import 'rounded_button.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
-  const AudioPlayerWidget({Key? key, required this.url}) : super(key: key);
+  const AudioPlayerWidget({
+    Key? key,
+    required this.url,
+    required this.onClose,
+  }) : super(key: key);
+
   final String url;
+  final VoidCallback onClose;
 
   @override
   State<AudioPlayerWidget> createState() => _AudioPlayerWidgetState();
@@ -86,8 +92,8 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   Widget spinner() {
     return const SizedBox(
-      width: 80,
-      height: 80,
+      width: 50,
+      height: 50,
       child: LoadingIndicator(
         indicatorType: Indicator.lineSpinFadeLoader,
         colors: [Colors.grey],
@@ -96,7 +102,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
     );
   }
 
-  Widget playButton() {
+  Widget playButton(BuildContext context) {
     switch (_processingState) {
       case ProcessingState.idle:
         return spinner();
@@ -105,35 +111,43 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
       default:
         return RoundedButton(
           onPress: play,
-          size: 80,
-          child: const Icon(Icons.play_arrow, size: 40),
+          size: 50,
+          child: Icon(
+            Icons.play_arrow,
+            size: 30,
+            color: Theme.of(context).colorScheme.background,
+          ),
         );
     }
   }
 
-  Widget playerButton() {
+  Widget playerButton(BuildContext context) {
     return _isPlayer
         ? RoundedButton(
             onPress: pause,
             size: 50,
-            child: const Icon(Icons.pause, size: 30),
+            child: Icon(
+              Icons.pause,
+              size: 30,
+              color: Theme.of(context).colorScheme.background,
+            ),
           )
-        : playButton();
+        : playButton(context);
   }
 
   Widget timeDurationString(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 30),
+      padding: const EdgeInsets.only(left: 10, right: 10),
       child: Text(
         '${_position.toString().substring(2, 7)} / ${_duration.toString().substring(2, 7)}',
-        style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+        style: TextStyle(color: Theme.of(context).colorScheme.primary),
       ),
     );
   }
 
   Widget slideControls() {
-    return Container(
-      padding: const EdgeInsets.all(10),
+    return SizedBox(
+      width: 175,
       child: Slider(
           value: _position!.inSeconds.toDouble(),
           min: 0.0,
@@ -146,12 +160,39 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        playerButton(),
-        slideControls(),
-        timeDurationString(context),
-      ],
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.background,
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).colorScheme.shadow,
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 2),
+          )
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            playerButton(context),
+            slideControls(),
+            timeDurationString(context),
+            RoundedButton(
+                onPress: () => widget.onClose(),
+                size: 30,
+                child: Icon(
+                  Icons.close,
+                  size: 15,
+                  color: Theme.of(context).colorScheme.background,
+                ))
+          ],
+        ),
+      ),
     );
   }
 }

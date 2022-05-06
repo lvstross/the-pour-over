@@ -16,6 +16,7 @@ class RoundedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     var radius = const BorderRadius.all(Radius.circular(50));
     return Material(
+      color: Theme.of(context).colorScheme.primary,
       borderRadius: radius,
       child: InkWell(
         borderRadius: radius,

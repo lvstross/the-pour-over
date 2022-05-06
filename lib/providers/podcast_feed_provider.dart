@@ -5,6 +5,8 @@ import 'package:webfeed/webfeed.dart';
 class PodcastFeedProvider with ChangeNotifier {
   List<RssItem>? _podcastItems = [];
   bool _isLoading = false;
+  String _currPlayUrl = '';
+  bool _showAudioPlayer = false;
 
   PodcastFeedProvider() {
     updateLoading(true);
@@ -13,6 +15,8 @@ class PodcastFeedProvider with ChangeNotifier {
 
   List<RssItem> get podcastItems => _podcastItems ?? [];
   bool get isLoading => _isLoading;
+  String get currentPlayingUrl => _currPlayUrl;
+  bool get showAudioPlayer => _showAudioPlayer;
 
   void getRssFeed() async {
     Uri feedUri = Uri(
@@ -35,6 +39,16 @@ class PodcastFeedProvider with ChangeNotifier {
 
   void updateLoading(bool loading) {
     _isLoading = loading;
+    notifyListeners();
+  }
+
+  void updateShowAudioPlayer(bool show) {
+    _showAudioPlayer = show;
+    notifyListeners();
+  }
+
+  void updatePlayingUrl(String url) {
+    _currPlayUrl = url;
     notifyListeners();
   }
 }
