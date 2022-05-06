@@ -40,6 +40,10 @@ dependencies:
   flutter_svg: ^1.0.3
   provider: ^6.0.2
   flutter_staggered_animations: ^1.0.0
+  webfeed: ^0.7.0
+  flutter_html: ^3.0.0-alpha.3
+  loading_indicator: ^3.0.3
+  just_audio: ^0.9.21
 
 dev_dependencies:
   flutter_test:

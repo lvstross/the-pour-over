@@ -3,14 +3,18 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:pour_over_app/providers/news_grid_provider.dart';
 import 'package:pour_over_app/providers/archive_list_provider.dart';
+import 'package:pour_over_app/providers/podcast_feed_provider.dart';
+import 'package:pour_over_app/screens/home.dart';
 import 'package:pour_over_app/screens/archive_list.dart';
 import 'package:pour_over_app/screens/news_grid.dart';
+import 'package:pour_over_app/screens/podcast_feed.dart';
 
 void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => ArchiveListProvider()),
-      ChangeNotifierProvider(create: (_) => NewsGridProvider())
+      ChangeNotifierProvider(create: (_) => NewsGridProvider()),
+      ChangeNotifierProvider(create: (_) => PodcastFeedProvider())
     ],
     child: const MyApp(),
   ));
@@ -21,6 +25,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Watch Provider Data
+    context.watch<ArchiveListProvider>();
+    context.watch<NewsGridProvider>();
+    context.watch<PodcastFeedProvider>();
+
     return MaterialApp(
       title: 'The Pour Over',
       theme: ThemeData(
@@ -67,18 +76,24 @@ class _MainState extends State<Main> {
   int pageIndex = 0;
 
   final pages = [
+    const Home(),
     const ArchiveList(),
     const NewsGrid(),
+    const PodcastFeed()
   ];
 
   String getAppBarTitle() {
     switch (pageIndex) {
       case 0:
-        return 'Archive List';
+        return 'The Pour Over';
       case 1:
+        return 'Archive List';
+      case 2:
         return 'News Rooms';
+      case 3:
+        return 'Podcast';
       default:
-        return 'the pour over';
+        return 'The Pour Over';
     }
   }
 
@@ -117,6 +132,25 @@ class _MainState extends State<Main> {
               },
               icon: pageIndex == 0
                   ? const Icon(
+                      Icons.home_sharp,
+                      color: Colors.white,
+                      size: 35,
+                    )
+                  : const Icon(
+                      Icons.home_outlined,
+                      color: Colors.white,
+                      size: 35,
+                    ),
+            ),
+            IconButton(
+              enableFeedback: false,
+              onPressed: () {
+                setState(() {
+                  pageIndex = 1;
+                });
+              },
+              icon: pageIndex == 1
+                  ? const Icon(
                       Icons.library_books,
                       color: Colors.white,
                       size: 35,
@@ -131,10 +165,10 @@ class _MainState extends State<Main> {
               enableFeedback: false,
               onPressed: () {
                 setState(() {
-                  pageIndex = 1;
+                  pageIndex = 2;
                 });
               },
-              icon: pageIndex == 1
+              icon: pageIndex == 2
                   ? const Icon(
                       Icons.grid_view_sharp,
                       color: Colors.white,
@@ -145,7 +179,26 @@ class _MainState extends State<Main> {
                       color: Colors.white,
                       size: 35,
                     ),
-            )
+            ),
+            IconButton(
+              enableFeedback: false,
+              onPressed: () {
+                setState(() {
+                  pageIndex = 3;
+                });
+              },
+              icon: pageIndex == 3
+                  ? const Icon(
+                      Icons.music_note,
+                      color: Colors.white,
+                      size: 35,
+                    )
+                  : const Icon(
+                      Icons.music_note_outlined,
+                      color: Colors.white,
+                      size: 35,
+                    ),
+            ),
           ],
         ),
       ),
