@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:pour_over_app/providers/news_grid_provider.dart';
-import 'package:pour_over_app/providers/archive_list_provider.dart';
-import 'package:pour_over_app/providers/podcast_feed_provider.dart';
 import 'package:pour_over_app/screens/home.dart';
 import 'package:pour_over_app/screens/archive_list.dart';
 import 'package:pour_over_app/screens/news_grid.dart';
 import 'package:pour_over_app/screens/podcast_feed.dart';
 import 'package:pour_over_app/widgets/audio_player.dart';
+import 'package:pour_over_app/providers/news_grid_provider.dart';
+import 'package:pour_over_app/providers/archive_list_provider.dart';
+import 'package:pour_over_app/providers/podcast_feed_provider.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -206,12 +206,12 @@ class _MainState extends State<Main> {
                     },
                     icon: pageIndex == 3
                         ? const Icon(
-                            Icons.music_note,
+                            Icons.mic,
                             color: Colors.white,
                             size: 35,
                           )
                         : const Icon(
-                            Icons.music_note_outlined,
+                            Icons.mic_none,
                             color: Colors.white,
                             size: 35,
                           ),

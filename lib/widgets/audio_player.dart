@@ -1,8 +1,8 @@
 import 'dart:core';
-import 'package:loading_indicator/loading_indicator.dart';
-import 'package:just_audio/just_audio.dart';
-import 'package:flutter/material.dart';
 import 'rounded_button.dart';
+import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class AudioPlayerWidget extends StatefulWidget {
   const AudioPlayerWidget({
@@ -24,6 +24,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
     duration: const Duration(milliseconds: 275),
     vsync: this,
   )..forward();
+
   late final Animation<Offset> _offsetAnimation = Tween<Offset>(
     begin: const Offset(0.0, 1.5),
     end: Offset.zero,

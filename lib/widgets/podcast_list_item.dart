@@ -38,11 +38,6 @@ class PodcastListItem extends StatelessWidget {
             child: Text(title, style: Theme.of(context).textTheme.bodyLarge),
           ),
           description,
-          // Audio tags don't render correctly: https://github.com/Sub6Resources/flutter_html/issues/989
-          // Html(
-          //   data:
-          //       '<audio controls="true" autoplay="false" src="${_podcastItems[index].enclosure?.url}"></audio>',
-          // )
           Container(
             alignment: Alignment.centerRight,
             margin: const EdgeInsets.only(right: 8.0, bottom: 8.0),
