@@ -18,7 +18,20 @@ class AudioPlayerWidget extends StatefulWidget {
   State<AudioPlayerWidget> createState() => _AudioPlayerWidgetState();
 }
 
-class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
+class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(milliseconds: 275),
+    vsync: this,
+  )..forward();
+  late final Animation<Offset> _offsetAnimation = Tween<Offset>(
+    begin: const Offset(0.0, 1.5),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(
+    parent: _controller,
+    curve: Curves.easeIn,
+  ));
+
   Duration? _duration = const Duration();
   Duration? _position = const Duration();
   String _currentUrl = '';
@@ -160,37 +173,40 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.background,
-        borderRadius: const BorderRadius.all(Radius.circular(5)),
-        boxShadow: [
-          BoxShadow(
-            color: Theme.of(context).colorScheme.shadow,
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 2),
-          )
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(4),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            playerButton(context),
-            slideControls(),
-            timeDurationString(context),
-            RoundedButton(
-                onPress: () => widget.onClose(),
-                size: 30,
-                child: Icon(
-                  Icons.close,
-                  size: 15,
-                  color: Theme.of(context).colorScheme.background,
-                ))
+    return SlideTransition(
+      position: _offsetAnimation,
+      child: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.background,
+          borderRadius: const BorderRadius.all(Radius.circular(5)),
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).colorScheme.shadow,
+              spreadRadius: 5,
+              blurRadius: 7,
+              offset: const Offset(0, 2),
+            )
           ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              playerButton(context),
+              slideControls(),
+              timeDurationString(context),
+              RoundedButton(
+                  onPress: () => widget.onClose(),
+                  size: 30,
+                  child: Icon(
+                    Icons.close,
+                    size: 15,
+                    color: Theme.of(context).colorScheme.background,
+                  ))
+            ],
+          ),
         ),
       ),
     );

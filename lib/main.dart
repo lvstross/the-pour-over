@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -127,18 +126,9 @@ class _MainState extends State<Main> {
         child: Column(
           children: [
             showAudioPlayer
-                // @todo: Change this to a custom animation rather than
-                // using the staggered package.
-                ? AnimationConfiguration.staggeredList(
-                    position: 0,
-                    duration: const Duration(milliseconds: 275),
-                    child: SlideAnimation(
-                      horizontalOffset: 500.0,
-                      child: AudioPlayerWidget(
-                        url: currPlayUrl,
-                        onClose: closePlayer,
-                      ),
-                    ),
+                ? AudioPlayerWidget(
+                    url: currPlayUrl,
+                    onClose: closePlayer,
                   )
                 : const Center(),
             Container(
