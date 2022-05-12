@@ -35,8 +35,6 @@ class _PodcastFeedState extends State<PodcastFeed> {
         context.watch<PodcastFeedProvider>().updatePlayingUrl;
 
     void setPodcastAudio(String url) {
-      // @todo: Audio does not update while audio is playing
-      // Make it so that the audio url changes and the player resets back.
       updatePlayingUrl(url);
       updateShowAudioPlayer(true);
     }

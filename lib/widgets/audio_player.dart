@@ -36,7 +36,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
   Duration? _duration = const Duration();
   Duration? _position = const Duration();
   String _currentUrl = '';
-  bool _isPlayer = false;
+  bool _isPlaying = false;
   ProcessingState _processingState = ProcessingState.idle;
   late AudioPlayer audioPlayer;
 
@@ -50,6 +50,19 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
   void dispose() {
     super.dispose();
     audioPlayer.dispose();
+    _controller.dispose();
+  }
+
+  void cycleNextAudio() async {
+    if (_isPlaying) {
+      await audioPlayer.stop();
+    }
+    setState(() {
+      _duration = const Duration();
+      _position = const Duration();
+      _isPlaying = false;
+    });
+    play();
   }
 
   Future<void> initPlayer() async {
@@ -72,7 +85,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
 
     audioPlayer.playerStateStream.listen((PlayerState state) {
       setState(() {
-        _isPlayer = state.playing;
+        _isPlaying = state.playing;
         _processingState = state.processingState;
       });
     });
@@ -90,10 +103,16 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
   void play() async {
     await setNewUrl();
     await audioPlayer.play();
+    setState(() {
+      _isPlaying = true;
+    });
   }
 
   void pause() async {
     await audioPlayer.pause();
+    setState(() {
+      _isPlaying = false;
+    });
   }
 
   void seekToSecond(int second) {
@@ -136,7 +155,7 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
   }
 
   Widget playerButton(BuildContext context) {
-    return _isPlayer
+    return _isPlaying
         ? RoundedButton(
             onPress: pause,
             size: 50,
@@ -174,6 +193,10 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
 
   @override
   Widget build(BuildContext context) {
+    if (widget.url != _currentUrl) {
+      cycleNextAudio();
+    }
+
     return SlideTransition(
       position: _offsetAnimation,
       child: Container(
