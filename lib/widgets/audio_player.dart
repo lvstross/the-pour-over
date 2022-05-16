@@ -158,18 +158,27 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
     }
   }
 
+  Widget pauseButton(BuildContext context) {
+    switch (_processingState) {
+      case ProcessingState.idle:
+        return spinner();
+      case ProcessingState.buffering:
+        return spinner();
+      default:
+        return RoundedButton(
+          onPress: pause,
+          size: 50,
+          child: Icon(
+            Icons.pause,
+            size: 30,
+            color: Theme.of(context).colorScheme.background,
+          ),
+        );
+    }
+  }
+
   Widget playerButton(BuildContext context) {
-    return _isPlaying
-        ? RoundedButton(
-            onPress: pause,
-            size: 50,
-            child: Icon(
-              Icons.pause,
-              size: 30,
-              color: Theme.of(context).colorScheme.background,
-            ),
-          )
-        : playButton(context);
+    return _isPlaying ? pauseButton(context) : playButton(context);
   }
 
   Widget timeDurationString(BuildContext context) {
