@@ -78,6 +78,10 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
     });
 
     audioPlayer.positionStream.listen((Duration? state) {
+      if (_processingState == ProcessingState.completed) {
+        seekToSecond(0);
+        pause();
+      }
       setState(() {
         _position = state;
       });
