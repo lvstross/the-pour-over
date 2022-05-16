@@ -186,12 +186,19 @@ class _AudioPlayerWidgetState extends State<AudioPlayerWidget>
     return SizedBox(
       width: 175,
       child: Slider(
-          value: _position!.inSeconds.toDouble(),
-          min: 0.0,
-          max: _duration!.inSeconds.toDouble(),
-          onChanged: (double value) {
-            seekToSecond(value.toInt());
-          }),
+        value: _position!.inSeconds.toDouble(),
+        min: 0.0,
+        max: _duration!.inSeconds.toDouble(),
+        onChanged: (double value) {
+          seekToSecond(value.toInt());
+        },
+        onChangeStart: (_) {
+          pause();
+        },
+        onChangeEnd: (_) {
+          play();
+        },
+      ),
     );
   }
 
